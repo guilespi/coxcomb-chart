@@ -84,25 +84,25 @@
                                  "L", x4, y4, 
                                  "A", r1, r1, 0, +(endAngle - startAngle > 180), 0, x1, y1, 
                                  "z"]).attr(params);
+      var label = positionLabel(paper, cx, cy, (r1 + r2) / 2, startAngle, endAngle, params); 
+      var section = paper.set();
+      section.push(polygon, label);
+      var onClick = function() {
+        if (typeof(params.onClick) === "function") {
+            section.toFront();
+            params.onClick(polygon, params.text);
+        }
+      };
       var onMouseOver = function() {
         polygon.attr({ "fill-opacity" : 0.2 });
       };
       var onMouseOut = function() {
         polygon.attr({ "fill-opacity": params["fill-opacity"] || 1 });
       };
-      var onClick = function() {
-        if (typeof(params.onClick) === "function") {
-            params.onClick(polygon, params.text);
-        }
-      };
-      polygon.mouseover(onMouseOver)
-             .mouseout(onMouseOut)
-             .click(onClick);
-      var label = positionLabel(paper, cx, cy, (r1 + r2) / 2, startAngle, endAngle, params); 
-      label.mouseover(onMouseOver)
+      section.mouseover(onMouseOver)
            .mouseout(onMouseOut)
            .click(onClick);
-      return polygon;
+      return section;
     };
 
     function getSeriesColor(category, serie, dataset) {
